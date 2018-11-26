@@ -16,17 +16,19 @@ defmodule MehrSchulferien.CollectBridgeDayData do
      country_ids = for %MehrSchulferien.Locations.Country{id: id} <- locations, do: id
      federal_state_ids = for %MehrSchulferien.Locations.FederalState{id: id} <- locations, do: id
 
-     if opts[:starts_on] do
-       starts_on = opts[:starts_on]
-     else
-       {:ok, starts_on} = Date.from_erl({Date.utc_today.year, 1, 1})
-     end
+     starts_on =
+       if opts[:starts_on] do
+         opts[:starts_on]
+       else
+         Date.from_erl!({Date.utc_today.year, 1, 1})
+       end
 
-     if opts[:ends_on] do
-       ends_on = opts[:ends_on]
-     else
-       {:ok, ends_on} = Date.from_erl({starts_on.year, 12, 31})
-     end
+     ends_on =
+       if opts[:ends_on] do
+         opts[:ends_on]
+       else
+         Date.from_erl!({starts_on.year, 12, 31})
+       end
 
      # Feiertage und Wochenenden
      #

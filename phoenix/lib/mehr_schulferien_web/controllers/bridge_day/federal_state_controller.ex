@@ -98,14 +98,18 @@ defmodule MehrSchulferienWeb.BridgeDay.FederalStateController do
   end
 
   defp get_dates(starts_on \\ nil, ends_on \\ nil) do
-    case {starts_on, ends_on} do
-      {nil, nil} -> {:ok, starts_on} = Date.from_erl({Date.utc_today.year, Date.utc_today.month, 1})
-                    ends_on = Date.add(starts_on, 364)
-      {starts_on, ends_on} -> {:ok, starts_on} = Ecto.Date.cast(starts_on)
-                              {:ok, ends_on} = Ecto.Date.cast(ends_on)
-                              {:ok, starts_on} = Date.from_erl(Ecto.Date.to_erl(starts_on))
-                              {:ok, ends_on} = Date.from_erl(Ecto.Date.to_erl(ends_on))
-    end
+    {starts_on, ends_on} =
+      case {starts_on, ends_on} do
+        {nil, nil} ->
+          {:ok, starts_on} = Date.from_erl({Date.utc_today.year, Date.utc_today.month, 1})
+          ends_on = Date.add(starts_on, 364)
+          {starts_on, ends_on}
+        {starts_on, ends_on} -> {:ok, starts_on} = Ecto.Date.cast(starts_on)
+                                {:ok, ends_on} = Ecto.Date.cast(ends_on)
+                                {:ok, starts_on} = Date.from_erl(Ecto.Date.to_erl(starts_on))
+                                {:ok, ends_on} = Date.from_erl(Ecto.Date.to_erl(ends_on))
+                                {starts_on, ends_on}
+      end
 
     CollectBridgeDayData.ramp_up_to_full_months(starts_on, ends_on)
   end

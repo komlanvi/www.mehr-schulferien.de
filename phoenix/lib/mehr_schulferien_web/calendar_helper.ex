@@ -5,11 +5,12 @@ defmodule MehrSchulferienWeb.CalendarHelper do
   import Ecto.Query
 
   def css_class(day, opts \\ []) do
-    if opts[:target] do
-      target = opts[:target]
-    else
-      target = :student
-    end
+    target =
+      if opts[:target] do
+        opts[:target]
+      else
+        :student
+      end
 
     categories = if target == :student do
       for {_period, %MehrSchulferien.Timetables.Category{name: name},

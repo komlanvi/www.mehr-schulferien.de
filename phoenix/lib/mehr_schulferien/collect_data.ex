@@ -18,33 +18,37 @@ defmodule MehrSchulferien.CollectData do
      city_ids = for %MehrSchulferien.Locations.City{id: id} <- locations, do: id
      school_ids = for %MehrSchulferien.Locations.School{id: id} <- locations, do: id
 
-     if opts[:starts_on] do
-       starts_on = opts[:starts_on]
-     else
-       {:ok, starts_on} = Date.from_erl({Date.utc_today.year, 1, 1})
-     end
+     starts_on =
+       if opts[:starts_on] do
+         opts[:starts_on]
+       else
+         Date.from_erl!({Date.utc_today.year, 1, 1})
+       end
 
-     if opts[:ends_on] do
-       ends_on = opts[:ends_on]
-     else
-       {:ok, ends_on} = Date.from_erl({starts_on.year, 12, 31})
-     end
+     ends_on =
+       if opts[:ends_on] do
+         opts[:ends_on]
+       else
+         Date.from_erl!({starts_on.year, 12, 31})
+       end
 
-     if opts[:categories] do
-       categories = opts[:categories]
-     else
-       query = from(categories in Category,
-                    where: categories.for_students == true and
-                           categories.needs_exeat == false)
-       categories = Repo.all(query)
-     end
+     categories =
+       if opts[:categories] do
+         opts[:categories]
+       else
+         query = from(categories in Category,
+                      where: categories.for_students == true and
+                             categories.needs_exeat == false)
+         Repo.all(query)
+       end
      category_ids = for %MehrSchulferien.Timetables.Category{id: id} <- categories, do: id
 
-     if opts[:additional_categories] do
-       additional_categories = opts[:additional_categories]
-     else
-       additional_categories = []
-     end
+     additional_categories =
+       if opts[:additional_categories] do
+         opts[:additional_categories]
+       else
+         []
+       end
      additional_categories_ids = for %MehrSchulferien.Timetables.Category{id: id} <- additional_categories, do: id
      category_ids = category_ids ++ additional_categories_ids
 

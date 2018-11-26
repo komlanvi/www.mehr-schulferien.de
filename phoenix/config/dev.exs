@@ -51,8 +51,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :mehr_schulferien, MehrSchulferien.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "komlanvi",
+  password: "komlanvi",
   database: "mehr_schulferien_dev",
   hostname: "localhost",
   pool_size: 10
