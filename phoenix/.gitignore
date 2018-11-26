@@ -71,3 +71,5 @@ erl_crash.dump
 *.beam
 /config/*.secret.exs
 .idea
+
+/assets/node_modules/
